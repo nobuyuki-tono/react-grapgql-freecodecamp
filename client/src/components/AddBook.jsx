@@ -1,18 +1,25 @@
 import React from "react";
-import { gql } from "apollo-boost";
+import { getAuhtorsQuery } from "../queries/queries";
 import { useQuery } from "@apollo/react-hooks";
-
-const getAuhtorsQuery = gql`
-  {
-    authors {
-      name
-      id
-    }
-  }
-`;
 
 const AddBook = () => {
   const { loading, error, data } = useQuery(getAuhtorsQuery);
+
+  const displayAuthor = () => {
+    const myData = data;
+
+    if (loading) {
+      return <option disabled>Loading authors...</option>;
+    } else {
+      return myData.authors.map(author => {
+        return (
+          <option key={author.id} value={author.id}>
+            {author.name}
+          </option>
+        );
+      });
+    }
+  };
 
   return (
     <form id="add-book">
@@ -28,6 +35,7 @@ const AddBook = () => {
         <label htmlFor="">Author: </label>
         <select name="" id="">
           <option value="">Select author</option>
+          {displayAuthor()}
         </select>
       </div>
 

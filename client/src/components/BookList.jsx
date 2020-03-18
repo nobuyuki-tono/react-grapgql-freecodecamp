@@ -1,15 +1,6 @@
 import React from "react";
-import { gql } from "apollo-boost";
+import { getBooksQuery } from "../queries/queries";
 import { useQuery } from "@apollo/react-hooks";
-
-const getBooksQuery = gql`
-  {
-    books {
-      name
-      id
-    }
-  }
-`;
 
 const BookList = () => {
   const { loading, error, data } = useQuery(getBooksQuery);
