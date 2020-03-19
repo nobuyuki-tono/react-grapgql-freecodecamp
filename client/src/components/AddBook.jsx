@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { getAuthorsQuery, addBookMutation } from "../queries/queries";
+import {
+  getAuthorsQuery,
+  addBookMutation,
+  getBooksQuery
+} from "../queries/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { useMutation } from "@apollo/react-hooks";
 
@@ -46,7 +50,8 @@ const AddBook = () => {
   const handleSubmit = e => {
     e.preventDefault();
     addBook({
-      variables: { name: formName, genre: formGenre, authorId: authorId }
+      variables: { name: formName, genre: formGenre, authorId: authorId },
+      refetchQueries: [{ query: getBooksQuery }]
     });
 
     setFormName("");
