@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { getAuhtorsQuery } from "../queries/queries";
+import { getAuthorsQuery, addBookMutation } from "../queries/queries";
 import { useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 
 const AddBook = () => {
-  const { loading, error, data } = useQuery(getAuhtorsQuery);
+  const { loading, error, data } = useQuery(getAuthorsQuery);
+  const [addBook, { mutationError }] = useMutation(addBookMutation);
+
   const [formName, setFormName] = useState("");
   const [formGenre, setFormGenre] = useState("");
   const [authorId, setAuthorId] = useState("");
 
   const displayAuthor = () => {
     const myData = data;
+
+    if (error) {
+      console.log(mutationError);
+    }
 
     if (loading) {
       return <option disabled>Loading authors...</option>;
@@ -38,10 +45,13 @@ const AddBook = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    addBook({
+      variables: { name: formName, genre: formGenre, authorId: authorId }
+    });
 
-    console.log(formName);
-    console.log(formGenre);
-    console.log(authorId);
+    setFormName("");
+    setFormGenre("");
+    setAuthorId("");
   };
 
   return (
